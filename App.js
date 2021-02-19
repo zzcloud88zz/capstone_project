@@ -3,8 +3,9 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
-import HomeScreen from "./Screens/HomeScreen";
-import BarcodeScannerScreen from "./Screens/BarcodeScannerScreen";
+import Home from "./Screens/Home";
+import BarcodeScanner from "./Screens/BarcodeScanner";
+import Cart from "./Screens/Cart";
 
 const Stack = createStackNavigator();
 
@@ -12,8 +13,9 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen name="Home" component={HomeScreen} />
-        <Stack.Screen name="Barcode Scanner" component={BarcodeScannerScreen} />
+        <Stack.Screen name="Home" component={Home} />
+        <Stack.Screen name="Barcode Scanner" component={BarcodeScanner} />
+        <Stack.Screen name="Cart" component={Cart} />
       </Stack.Navigator>
     </NavigationContainer>
   );
