@@ -11,10 +11,8 @@ const API_ALLITEMS = "https://zzcloud88zz.pythonanywhere.com/items";
 export default function BarcodeScanner({ navigation }) {
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
-  const [id, setId] = useState([]);
-  const [barcode, setBarcode] = useState([]);
-  const [product, setProduct] = useState([]);
-  const [price, setPrice] = useState([]);
+  const [item, setItem] = useState([]);
+  const [allitems, setAllitems] = useState([]);
 
   // Cart icon button on header right
   useEffect(() => {
@@ -25,7 +23,7 @@ export default function BarcodeScanner({ navigation }) {
             name="shopping-cart"
             size={32}
             color="black"
-            onPress={() => navigation.navigate("Cart", { id, barcode, product, price })}
+            onPress={() => navigation.navigate("Cart", { item })}
           />
         </TouchableOpacity>
       ),
@@ -46,11 +44,9 @@ export default function BarcodeScanner({ navigation }) {
 
     axios.get(API_ALLITEMS + "/" + data) // Get data back from Flask using barcode
     .then(response => {
-      console.log(response)
-      setId(data);
-      setBarcode(data);
-      setProduct(response.data.product)
-      setPrice(response.data.price)
+      // console.log(response.data)
+      setItem(response.data)
+      setAllitems([...allitems, response.data])
     })
     .catch(error => {
       console.log(error)
@@ -76,12 +72,12 @@ export default function BarcodeScanner({ navigation }) {
       <View style={styles.itemframe}>
         <Text style={styles.itemtitle}>Item</Text>
         <Text style={styles.item}>{"\n"}
-          barcode: {barcode}{"\n"}
-          product: {product}{"\n"}
-          price: ${price}{"\n"}{"\n"}
+          barcode: {item.barcode}{"\n"}
+          product: {item.product}{"\n"}
+          price: ${item.price}{"\n"}{"\n"}
         </Text>
 
-        <TouchableOpacity style={ styles.addbutton } onPress={() => navigation.navigate("Cart", { id, barcode, product, price })}>
+        <TouchableOpacity style={ styles.addbutton } onPress={() => navigation.navigate("Cart", { allitems })}>
           <Text style={ styles.addbuttontext }>Add to Cart</Text>
         </TouchableOpacity>
       </View>

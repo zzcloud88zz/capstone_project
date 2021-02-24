@@ -1,9 +1,11 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, FlatList } from 'react-native';
+import { StyleSheet, Text, View, FlatList, TouchableOpacity, Alert } from 'react-native';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 export default function Cart({ route }) {
-    const [items, setItem] = useState([route.params]);
+    const [cart, setCart] = useState(route.params.allitems);
+    console.log(cart);
 
     // The function to render each row in our FlatList
     function renderItem({ item }) {
@@ -19,15 +21,38 @@ export default function Cart({ route }) {
                 justifyContent: "space-between",
                 }}
             >
-                <Text>hahaha{item.product}</Text>
+                <Text>{item.product}</Text>
+                {/* Delete button */}
+                <TouchableOpacity onPress={() => deleteItem(item.barcode)} style={{ paddingLeft: 15 }}>
+                  <MaterialCommunityIcons name="delete-empty" size={44} color="maroon" />
+                </TouchableOpacity>
             </View>
         );
+    }
+
+    function deleteItem(barcode) {
+      Alert.alert(
+        "Hold On!",
+        "Are you sure you want to delete?",
+        [
+          {
+            text: "Cancel",
+            onPress: () => console.log("Cancelled"),
+            style: "cancel"
+          },
+          { text: "OK", onPress: () => {
+              const refresh = cart.filter(cart=>cart.barcode !== barcode)
+              setCart(refresh)
+          }
+        }],
+        { cancelable: false }
+      );
     }
 
   return (
     <View style={styles.container}>
         <FlatList
-            data={items}
+            data={cart}
             renderItem={renderItem}
             style={{ width: "100%" }}
             keyExtractor={(item) => item.barcode}
