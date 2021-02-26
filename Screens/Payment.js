@@ -2,9 +2,8 @@ import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 
-export default function testing({ route }) {
+export default function Payment() {
     const [a, setA] = useState([]);
-    console.log(route.params.cart)
 
   return (
     <View style={styles.container}>

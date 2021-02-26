@@ -82,7 +82,18 @@ export default function Cart({ route, navigation }) {
               style={{ width: "100%" }}
               keyExtractor={(item) => item.barcode}
           />
-        <Text>Total: $</Text>
+          <View style={styles.payment}>
+            <Text style={styles.totalprice}>
+              Total: $
+            </Text>
+            { cart == "" ? (
+              <Text></Text>
+            ) : (
+              <TouchableOpacity style={styles.paybutton} onPress={() => navigation.navigate("Payment")}>
+                <Text style={styles.paybuttontext}>Pay</Text>
+              </TouchableOpacity>
+            )}
+          </View>
         <StatusBar style="auto" />
       </ImageBackground>
     </View>
@@ -109,5 +120,25 @@ const styles = StyleSheet.create({
     textDecorationLine: "underline",
     fontSize: 32,
     fontWeight: "bold",
+  },
+  payment: {
+    flexDirection: "row",
+    backgroundColor: "whitesmoke",
+    padding: 20,
+    marginBottom: 10,
+    justifyContent: "space-between",
+  },
+  totalprice: {
+    fontSize: 20,
+  },
+  paybutton: {
+    backgroundColor: "lightgreen",
+    padding: 20,
+    paddingLeft: 35,
+    paddingRight: 35,
+    borderRadius: 5,
+  },
+  paybuttontext: {
+    fontSize: 18,
   },
 });
