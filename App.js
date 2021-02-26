@@ -6,6 +6,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import Home from "./Screens/Home";
 import BarcodeScanner from "./Screens/BarcodeScanner";
 import Cart from "./Screens/Cart";
+import testing from "./Screens/testing";
 
 const Stack = createStackNavigator();
 
@@ -16,6 +17,7 @@ export default function App() {
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="Barcode Scanner" component={BarcodeScanner} />
         <Stack.Screen name="Cart" component={Cart} />
+        <Stack.Screen name="testing" component={testing} />
       </Stack.Navigator>
     </NavigationContainer>
   );

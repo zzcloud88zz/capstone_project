@@ -1,18 +1,23 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
 import { BarCodeScanner } from 'expo-barcode-scanner';
-import { StyleSheet, Text, View, Button, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Button, TouchableOpacity, ImageBackground } from 'react-native';
 import { Entypo } from '@expo/vector-icons';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from "axios";
 
 const API_ALLITEMS = "https://zzcloud88zz.pythonanywhere.com/items";
 
-export default function BarcodeScanner({ navigation }) {
+export default function BarcodeScanner({ navigation, route }) {
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
   const [item, setItem] = useState([]);
   const [allitems, setAllitems] = useState([]);
+  const Outlet = route.params.Outlet;
+  const deleteditem = route.params.deleted;
+
+  useEffect(() => {
+    setAllitems(allitems.filter(allitems=>allitems.barcode !== deleteditem))
+  }, [deleteditem])
 
   // Cart icon button on header right
   useEffect(() => {
@@ -23,7 +28,7 @@ export default function BarcodeScanner({ navigation }) {
             name="shopping-cart"
             size={32}
             color="black"
-            onPress={() => navigation.navigate("Cart", { item })}
+            onPress={() => navigation.navigate("Cart", { allitems, Outlet })}
           />
         </TouchableOpacity>
       ),
@@ -40,11 +45,10 @@ export default function BarcodeScanner({ navigation }) {
 
   function handleBarCodeScanned({ type, data }) {
     setScanned(true);
-    alert(`Bar code type ${type} - barcode ${data} scanned!`);
-
-    axios.get(API_ALLITEMS + "/" + data) // Get data back from Flask using barcode
+    alert(`Item added to cart!`);
+    // Get data back from Flask using barcode
+    axios.get(API_ALLITEMS + "/" + data)
     .then(response => {
-      // console.log(response.data)
       setItem(response.data)
       setAllitems([...allitems, response.data])
     })
@@ -62,62 +66,83 @@ export default function BarcodeScanner({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <View style={styles.scannerframe}>
-        <BarCodeScanner
-          onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-          style={styles.scanner}
-        />
-        {scanned && <Button title={'Tap to Scan Again'} onPress={() => setScanned(false)} />}
-      </View>
-      <View style={styles.itemframe}>
-        <Text style={styles.itemtitle}>Item</Text>
-        <Text style={styles.item}>{"\n"}
-          barcode: {item.barcode}{"\n"}
-          product: {item.product}{"\n"}
-          price: ${item.price}{"\n"}{"\n"}
-        </Text>
+      <ImageBackground source={require("./images/Scanner.jpg")} style={styles.image}>
+        {/* Outlet */}
+        <Text style={styles.outlet}>{Outlet}</Text>
+        {/* Scanner */}
+        <View style={styles.scannerframe}>
+          <BarCodeScanner
+            onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+            style={styles.scanner}
+          />
+        </View>
+          <View style={styles.scanagain}>
+            {scanned && <Button title={'Tap to Scan Again'} onPress={() => setScanned(false)} />}
+          </View>
+        <View style={styles.itemframe}>
+          <Text style={styles.itemtitle}>Item</Text>
+          <Text style={styles.item}>{"\n"}
+            barcode: {item.barcode}{"\n"}
+            product: {item.product}{"\n"}
+            price: ${item.price}{"\n"}
+          </Text>
+        </View>
 
-        <TouchableOpacity style={ styles.addbutton } onPress={() => navigation.navigate("Cart", { allitems })}>
-          <Text style={ styles.addbuttontext }>Add to Cart</Text>
-        </TouchableOpacity>
-      </View>
-
-      <StatusBar style="auto" />
+        <StatusBar style="auto" />
+      </ImageBackground>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     alignItems: 'center',
     flexDirection: 'column',
     justifyContent: 'center',
-    backgroundColor: "#652121",
     opacity: 0.8,
   },
+  image: {
+    flex: 1,
+    resizeMode: "cover",
+    justifyContent: "center"
+  },
+  outlet: {
+    padding: 10,
+    backgroundColor: "whitesmoke",
+    fontSize: 20,
+    textAlign: "center",
+    paddingLeft: 110,
+    paddingRight: 110,
+  },
   scannerframe: {
-    margin: 10,
+    margin: 5,
     borderWidth: 5,
     borderRadius: 10,
     borderColor: "skyblue",
+    height: "45%",
   },
   scanner: {
-    padding: 170,
-    paddingBottom: 200,
+    height: "100%",
+    resizeMode: "cover",
+    justifyContent: "center",
+  },
+  scanagain: {
+    backgroundColor: "brown"
   },
   itemframe: {
     alignItems: "center",
-    backgroundColor: "#fffff2",
+    backgroundColor: "beige",
     padding: 20,
     paddingLeft: 50,
     paddingRight: 50,
   },
   itemtitle: {
     textDecorationLine: "underline",
-    fontSize: 30,
+    fontSize: 24,
   },
   item: {
-    fontSize: 20,
+    fontSize: 18,
   },
   addbutton: {
     backgroundColor: "red",

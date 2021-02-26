@@ -1,11 +1,27 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, FlatList, TouchableOpacity, Alert } from 'react-native';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, Text, View, FlatList, TouchableOpacity, Alert, ImageBackground } from 'react-native';
+import { MaterialCommunityIcons, Entypo } from '@expo/vector-icons';
 
-export default function Cart({ route }) {
+export default function Cart({ route, navigation }) {
+    const Outlet = route.params.Outlet;
     const [cart, setCart] = useState(route.params.allitems);
-    console.log(cart);
+    const [deleted, setDeleted] = useState([]);
+
+    useEffect(() => {
+      navigation.setOptions({
+        headerLeft: () => (
+          <TouchableOpacity style={{ paddingRight: 10 }}>
+            <Entypo
+              onPress={() => navigation.navigate("Barcode Scanner", { deleted })}
+              name="back"
+              size={40}
+              color="black"
+            />
+          </TouchableOpacity>
+        ),
+      });
+    });
 
     // The function to render each row in our FlatList
     function renderItem({ item }) {
@@ -19,17 +35,23 @@ export default function Cart({ route }) {
                 borderBottomWidth: 1,
                 flexDirection: "row",
                 justifyContent: "space-between",
+                backgroundColor: "white",
+                opacity: 0.8,
                 }}
             >
-                <Text>{item.product}</Text>
+                <Text>
+                Item: {item.product}{"\n"}
+                Price: ${item.price}
+                </Text>
                 {/* Delete button */}
                 <TouchableOpacity onPress={() => deleteItem(item.barcode)} style={{ paddingLeft: 15 }}>
-                  <MaterialCommunityIcons name="delete-empty" size={44} color="maroon" />
+                  <MaterialCommunityIcons name="delete-empty" size={44} color="black" />
                 </TouchableOpacity>
             </View>
         );
     }
 
+    // delete function
     function deleteItem(barcode) {
       Alert.alert(
         "Hold On!",
@@ -41,8 +63,8 @@ export default function Cart({ route }) {
             style: "cancel"
           },
           { text: "OK", onPress: () => {
-              const refresh = cart.filter(cart=>cart.barcode !== barcode)
-              setCart(refresh)
+            setDeleted(barcode)
+            setCart(cart.filter(cart=>cart.barcode !== barcode))
           }
         }],
         { cancelable: false }
@@ -51,13 +73,18 @@ export default function Cart({ route }) {
 
   return (
     <View style={styles.container}>
-        <FlatList
-            data={cart}
-            renderItem={renderItem}
-            style={{ width: "100%" }}
-            keyExtractor={(item) => item.barcode}
-        />
-      <StatusBar style="auto" />
+      <ImageBackground source={require("./images/Cart.jpg")} style={styles.image}>
+        {/* Outlet */}
+        <Text style={styles.outlet}>{Outlet}</Text>
+          <FlatList
+              data={cart}
+              renderItem={renderItem}
+              style={{ width: "100%" }}
+              keyExtractor={(item) => item.barcode}
+          />
+        <Text>Total: $</Text>
+        <StatusBar style="auto" />
+      </ImageBackground>
     </View>
   );
 }
@@ -66,8 +93,17 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    // alignItems: 'center',
-    // justifyContent: 'center',
+  },
+  image: {
+    flex: 1,
+    resizeMode: "cover",
+    justifyContent: "center"
+  },
+  outlet: {
+    padding: 10,
+    backgroundColor: "grey",
+    fontSize: 20,
+    textAlign: "center",
   },
   carttitle: {
     textDecorationLine: "underline",
