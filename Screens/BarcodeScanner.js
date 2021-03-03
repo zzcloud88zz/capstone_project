@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
 import { BarCodeScanner } from 'expo-barcode-scanner';
-import { StyleSheet, Text, View, Button, TouchableOpacity, ImageBackground } from 'react-native';
+import { StyleSheet, Text, View, Button, TouchableOpacity, ImageBackground, Alert } from 'react-native';
 import { Entypo } from '@expo/vector-icons';
 import axios from "axios";
 
@@ -45,12 +45,24 @@ export default function BarcodeScanner({ navigation, route }) {
 
   function handleBarCodeScanned({ type, data }) {
     setScanned(true);
-    alert(`Item added to cart!`);
     // Get data back from Flask using barcode
     axios.get(API_ALLITEMS + "/" + data)
     .then(response => {
+      if ([allitems.filter(allitems=>allitems.barcode == response.data.barcode)] > [0]) {
+        Alert.alert(
+          "Item already in cart!",
+          "Go to your Cart to change quantity",
+          [
+            { text: "OK", onPress: () => console.log('OK Pressed')}
+          ],
+          { cancelable: false }
+        );
+      }
+      else {
+      alert(`Item added to cart!`);
       setItem(response.data)
       setAllitems([...allitems, response.data])
+      }
     })
     .catch(error => {
       console.log(error)
