@@ -42,12 +42,15 @@ export default function Cart({ route, navigation }) {
             >
                 <Text>
                 Item: {item.product}{"\n"}
-                Price: ${item.price}
+                Price: ${(item.price*item.count).toFixed(2)}
                 </Text>
-                <Text>
-                  {item.count}
-                </Text>
+                {/* Increment button */}
                 <Button onPress={() => increment(item)} title="+"></Button>
+                  <Text>
+                    Quantity: {item.count}
+                  </Text>
+                {/* Decrement button */}
+                <Button onPress={() => decrement(item)} title="-"></Button>
                 {/* Delete button */}
                 <TouchableOpacity onPress={() => deleteItem(item.barcode)} style={{ paddingLeft: 15 }}>
                   <MaterialCommunityIcons name="delete-empty" size={44} color="black" />
@@ -56,8 +59,15 @@ export default function Cart({ route, navigation }) {
         );
     }
 
+    // Increment counter
     function increment(item) {
       item.count = item.count + 1
+      setCart(cart.filter(cart=>cart.count !== 0))
+    }
+
+    // Decrement counter
+    function decrement(item) {
+      item.count = item.count - 1
       setCart(cart.filter(cart=>cart.count !== 0))
     }
 

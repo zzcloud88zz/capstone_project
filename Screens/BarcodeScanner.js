@@ -48,7 +48,7 @@ export default function BarcodeScanner({ navigation, route }) {
     // Get data back from Flask using barcode
     axios.get(API_ALLITEMS + "/" + data)
     .then(response => {
-      response.data.count = 1
+      response.data.count = 1 // Push a default quantity count = 1 into Json Obj to be used for counter in Cart
       if ([allitems.filter(allitems=>allitems.barcode == response.data.barcode)] > [0]) {
         Alert.alert(
           "Item already in cart!",
