@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, FlatList, TouchableOpacity, Alert, ImageBackground } from 'react-native';
+import { StyleSheet, Text, View, FlatList, TouchableOpacity, Alert, ImageBackground, Button } from 'react-native';
 import { MaterialCommunityIcons, Entypo } from '@expo/vector-icons';
 
 export default function Cart({ route, navigation }) {
@@ -8,6 +8,7 @@ export default function Cart({ route, navigation }) {
     const [cart, setCart] = useState(route.params.allitems);
     const [deleted, setDeleted] = useState([]);
 
+    // Back button at top left
     useEffect(() => {
       navigation.setOptions({
         headerLeft: () => (
@@ -43,12 +44,21 @@ export default function Cart({ route, navigation }) {
                 Item: {item.product}{"\n"}
                 Price: ${item.price}
                 </Text>
+                <Text>
+                  {item.count}
+                </Text>
+                <Button onPress={() => increment(item)} title="+"></Button>
                 {/* Delete button */}
                 <TouchableOpacity onPress={() => deleteItem(item.barcode)} style={{ paddingLeft: 15 }}>
                   <MaterialCommunityIcons name="delete-empty" size={44} color="black" />
                 </TouchableOpacity>
             </View>
         );
+    }
+
+    function increment(item) {
+      item.count = item.count + 1
+      setCart(cart.filter(cart=>cart.count !== 0))
     }
 
     // delete function
