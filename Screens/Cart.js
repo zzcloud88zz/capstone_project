@@ -91,6 +91,11 @@ export default function Cart({ route, navigation }) {
       );
     }
 
+    let initialValue = 0
+    let totalPrice = (cart.reduce(function (accumulator, currentValue) {
+      return accumulator + currentValue.price*currentValue.count
+    }, initialValue)).toFixed(2)
+
   return (
     <View style={styles.container}>
       <ImageBackground source={require("./images/Cart.jpg")} style={styles.image}>
@@ -103,13 +108,13 @@ export default function Cart({ route, navigation }) {
               keyExtractor={(item) => item.barcode}
           />
           <View style={styles.payment}>
-            <Text style={styles.totalprice}>
-              Total: $
-            </Text>
+              <Text style={styles.totalprice}>
+                Total: ${totalPrice}
+              </Text>
             { cart == "" ? (
               <Text></Text>
             ) : (
-              <TouchableOpacity style={styles.paybutton} onPress={() => navigation.navigate("Payment")}>
+              <TouchableOpacity style={styles.paybutton} onPress={() => navigation.navigate("Payment", cart)}>
                 <Text style={styles.paybuttontext}>Pay</Text>
               </TouchableOpacity>
             )}

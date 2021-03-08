@@ -2,8 +2,9 @@ import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 
-export default function Payment() {
-    const [a, setA] = useState([]);
+export default function Payment({ route }) {
+    const [a, setA] = useState(route.params);
+    console.log(a);
 
   return (
     <View style={styles.container}>
