@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 
 export default function Payment({ route }) {
-    const [a, setA] = useState(route.params);
+    const [a, setA] = useState(route.params.totalPrice);
     console.log(a);
 
   return (

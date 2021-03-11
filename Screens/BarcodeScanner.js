@@ -15,11 +15,12 @@ export default function BarcodeScanner({ navigation, route }) {
   const Outlet = route.params.Outlet;
   const deleteditem = route.params.deleted;
 
+  // Update const variable "allitems" whenever back button in Cart is pressed.
   useEffect(() => {
     setAllitems(allitems.filter(allitems=>allitems.barcode !== deleteditem))
   }, [deleteditem])
 
-  // Cart icon button on header right
+  // Go to cart icon button on header right
   useEffect(() => {
     navigation.setOptions({
       headerRight: () => (
@@ -43,12 +44,13 @@ export default function BarcodeScanner({ navigation, route }) {
     })();
   }, []);
 
+  // Scanned item handler
   function handleBarCodeScanned({ type, data }) {
     setScanned(true);
     // Get data back from Flask using barcode
     axios.get(API_ALLITEMS + "/" + data)
     .then(response => {
-      response.data.count = 1 // Push a default quantity count = 1 into Json Obj to be used for counter in Cart
+      response.data.quantity = 1 // Push a default quantity = 1 into Json Obj to be used for quantity counter in Cart
       if ([allitems.filter(allitems=>allitems.barcode == response.data.barcode)] > [0]) {
         Alert.alert(
           "Item already in cart!",

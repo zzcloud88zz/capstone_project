@@ -24,7 +24,7 @@ export default function Cart({ route, navigation }) {
       });
     });
 
-    // The function to render each row in our FlatList
+    // The function to render each item in FlatList
     function renderItem({ item }) {
         return (
             <View
@@ -42,12 +42,12 @@ export default function Cart({ route, navigation }) {
             >
                 <Text>
                 Item: {item.product}{"\n"}
-                Price: ${(item.price*item.count).toFixed(2)}
+                Price: ${(item.price*item.quantity).toFixed(2)}
                 </Text>
                 {/* Increment button */}
                 <Button onPress={() => increment(item)} title="+"></Button>
                   <Text>
-                    Quantity: {item.count}
+                    Quantity: {item.quantity}
                   </Text>
                 {/* Decrement button */}
                 <Button onPress={() => decrement(item)} title="-"></Button>
@@ -59,16 +59,16 @@ export default function Cart({ route, navigation }) {
         );
     }
 
-    // Increment counter
+    // Increment quantity counter
     function increment(item) {
-      item.count = item.count + 1
-      setCart(cart.filter(cart=>cart.count !== 0))
+      item.quantity = item.quantity + 1
+      setCart(cart.filter(cart=>cart.quantity !== 0))
     }
 
-    // Decrement counter
+    // Decrement quantity counter
     function decrement(item) {
-      item.count = item.count - 1
-      setCart(cart.filter(cart=>cart.count !== 0))
+      item.quantity = item.quantity - 1
+      setCart(cart.filter(cart=>cart.quantity !== 0))
     }
 
     // delete function
@@ -90,10 +90,11 @@ export default function Cart({ route, navigation }) {
         { cancelable: false }
       );
     }
-
+    
+    // Total price calculation
     let initialValue = 0
-    let totalPrice = (cart.reduce(function (accumulator, currentValue) {
-      return accumulator + currentValue.price*currentValue.count
+    const totalPrice = (cart.reduce(function (accumulator, currentValue) {
+      return accumulator + currentValue.price*currentValue.quantity
     }, initialValue)).toFixed(2)
 
   return (
@@ -114,7 +115,7 @@ export default function Cart({ route, navigation }) {
             { cart == "" ? (
               <Text></Text>
             ) : (
-              <TouchableOpacity style={styles.paybutton} onPress={() => navigation.navigate("Payment", cart)}>
+              <TouchableOpacity style={styles.paybutton} onPress={() => navigation.navigate("Payment", { cart, totalPrice })}>
                 <Text style={styles.paybuttontext}>Pay</Text>
               </TouchableOpacity>
             )}
