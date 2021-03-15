@@ -102,7 +102,6 @@ export default function BarcodeScanner({ navigation, route }) {
             price: ${item.price}{"\n"}
           </Text>
         </View>
-
         <StatusBar style="auto" />
       </ImageBackground>
     </View>
