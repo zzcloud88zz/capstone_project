@@ -1,12 +1,16 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { StyleSheet, Text, View, FlatList, TouchableOpacity, Alert, ImageBackground, Button } from 'react-native';
 import { MaterialCommunityIcons, Entypo } from '@expo/vector-icons';
 
-export default function Cart({ route, navigation }) {
+export default function Receipt({ route, navigation }) {
     const Outlet = route.params.Outlet;
-    const [cart, setCart] = useState(route.params.allitems);
-    const [deleted, setDeleted] = useState([]);
+    const cart = route.params.cart;
+    const totalPrice = route.params.totalPrice;
+
+    console.log(route.params.Outlet);
+    console.log(route.params.cart);
+    console.log(route.params.totalPrice);
 
     // Back button at top left
     useEffect(() => {
@@ -14,7 +18,7 @@ export default function Cart({ route, navigation }) {
         headerLeft: () => (
           <TouchableOpacity style={{ paddingRight: 10 }}>
             <Entypo
-              onPress={() => navigation.navigate("Barcode Scanner", { deleted })}
+              onPress={() => navigation.navigate("Home")}
               name="back"
               size={40}
               color="black"
@@ -42,64 +46,16 @@ export default function Cart({ route, navigation }) {
             >
                 <Text>
                 Item: {item.product}{"\n"}
+                Quantity: {item.quantity}{"\n"}
                 Price: ${(item.price*item.quantity).toFixed(2)}
                 </Text>
-                {/* Increment button */}
-                <Button onPress={() => increment(item)} title="+"></Button>
-                  <Text>
-                    Quantity: {item.quantity}
-                  </Text>
-                {/* Decrement button */}
-                <Button onPress={() => decrement(item)} title="-"></Button>
-                {/* Delete button */}
-                <TouchableOpacity onPress={() => deleteItem(item.barcode)} style={{ paddingLeft: 15 }}>
-                  <MaterialCommunityIcons name="delete-empty" size={44} color="black" />
-                </TouchableOpacity>
             </View>
         );
     }
 
-    // Increment quantity counter
-    function increment(item) {
-      item.quantity = item.quantity + 1
-      setCart(cart.filter(cart=>cart.quantity !== 0))
-    }
-
-    // Decrement quantity counter
-    function decrement(item) {
-      item.quantity = item.quantity - 1
-      setCart(cart.filter(cart=>cart.quantity !== 0))
-    }
-
-    // delete function
-    function deleteItem(barcode) {
-      Alert.alert(
-        "Hold On!",
-        "Are you sure you want to delete?",
-        [
-          {
-            text: "Cancel",
-            onPress: () => console.log("Cancelled"),
-            style: "cancel"
-          },
-          { text: "OK", onPress: () => {
-            setDeleted(barcode)
-            setCart(cart.filter(cart=>cart.barcode !== barcode))
-          }
-        }],
-        { cancelable: false }
-      );
-    }
-    
-    // Total price calculation
-    let initialValue = 0
-    const totalPrice = (cart.reduce(function (accumulator, currentValue) {
-      return accumulator + currentValue.price*currentValue.quantity
-    }, initialValue)).toFixed(2)
-
   return (
     <View style={styles.container}>
-      <ImageBackground source={require("./images/Cart.jpg")} style={styles.image}>
+      <ImageBackground source={require("./images/Receipt.jpg")} style={styles.image}>
         {/* Outlet */}
         <Text style={styles.outlet}>{Outlet}</Text>
           <FlatList
@@ -115,8 +71,8 @@ export default function Cart({ route, navigation }) {
             { cart == "" ? (
               <Text></Text>
             ) : (
-              <TouchableOpacity style={styles.paybutton} onPress={() => navigation.navigate("Payment", { Outlet, cart, totalPrice })}>
-                <Text style={styles.paybuttontext}>Pay</Text>
+              <TouchableOpacity style={styles.paybutton} onPress={() => navigation.navigate("Home")}>
+                <Text style={styles.paybuttontext}>Back to Home</Text>
               </TouchableOpacity>
             )}
           </View>

@@ -7,6 +7,7 @@ export default function Payment({ route, navigation}) {
   const [response, setResponse] = useState();
   const [makePayment, setMakePayment] = useState(false);
   const [paymentStatus, setPaymentStatus] = useState("");
+  const Outlet = route.params.Outlet;
   const cart = route.params.cart;
   const totalPrice = route.params.totalPrice;
   const cartInfo = {
@@ -24,7 +25,7 @@ export default function Payment({ route, navigation}) {
 
     try {
       const stripeResponse = await axios.post("http://localhost:8000/payment", {
-        email: "codergogoi@gmail.com",
+        email: "shengrong_88@hotmail.com",
         product: cartInfo,
         authToken: jsonResponse,
       });
@@ -41,6 +42,7 @@ export default function Payment({ route, navigation}) {
     } catch (error) {
       console.log(error);
       setPaymentStatus(" Payment failed due to some issue");
+      navigation.navigate("Receipt", { Outlet, cart, totalPrice })
     }
   };
 
