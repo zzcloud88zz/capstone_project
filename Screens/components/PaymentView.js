@@ -5,7 +5,7 @@ const STRIPE_PK =
   "pk_test_51ITpKpC8lSRZeTLQZfiTDsmkMi1JRX3WrQCeBSyCJeUsFa5QMD2CFK5BCg7vmzEmfX5HdmZBGsBIXhxn6c9tzZTU00AvM6ZUMQ";
 
 const PaymentView = (props) => {
-  const { amount, product } = props;
+  const { amount } = props;
 
   const onCheckStatus = (response) => {
     props.onCheckStatus(response);
@@ -26,12 +26,12 @@ const PaymentView = (props) => {
                     flex-direction: column;
                     height: 200px;
                     justify-content: space-around;
-                    background-color: #3D097F;
+                    background-color: pink;
                     border-radius: 20px;
                     padding: 10px;
                     padding-top: 20px;
                     padding-bottom: 20px;
-                    margin-top: 50px;
+                    margin-top: 40px;
                     margin-bottom: 50px;
                 }
                 .card-element{

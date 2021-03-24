@@ -8,7 +8,7 @@ export default function Home({ navigation }) {
       <ImageBackground source={require("./images/Home.jpg")} style={styles.image}>
         <View style={styles.welcomebox}>
           <Text style={styles.welcomemsg}>Welcome!</Text>
-          <Text style={styles.welcomemsg}>Tap on the one of following outlet to start your shopping!</Text>
+          <Text style={styles.welcomemsg}>Check in to one of following outlets to start your shopping!</Text>
         </View>
           <Text>{"\n"}</Text>
 

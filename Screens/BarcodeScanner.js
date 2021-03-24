@@ -20,6 +20,34 @@ export default function BarcodeScanner({ navigation, route }) {
     setAllitems(allitems.filter(allitems=>allitems.barcode !== deleteditem))
   }, [deleteditem])
 
+  // Back to Home Screen button at top left
+  useEffect(() => {
+    navigation.setOptions({
+      headerLeft: () => (
+        <TouchableOpacity style={{ paddingRight: 10 }} onPress={() => BacktoHome()}>
+          <Text style={{ color: "skyblue", fontSize: 18, padding: 10 }}>Home</Text>
+        </TouchableOpacity>
+      ),
+    });
+  });
+
+  // Back to Home Screen function
+  function BacktoHome() {
+    Alert.alert(
+      "Are you sure you want to leave?",
+      "Any pending items in cart will be emptied.",
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancelled"),
+          style: "cancel"
+        },
+        { text: "OK", onPress: () => {navigation.navigate("Home")}
+      }],
+      { cancelable: false }
+    );
+  }
+
   // Go to cart icon button on header right
   useEffect(() => {
     navigation.setOptions({
@@ -97,8 +125,7 @@ export default function BarcodeScanner({ navigation, route }) {
         <View style={styles.itemframe}>
           <Text style={styles.itemtitle}>Item</Text>
           <Text style={styles.item}>{"\n"}
-            barcode: {item.barcode}{"\n"}
-            product: {item.product}{"\n"}
+            product: {item.product}{"\n"}{"\n"}
             price: ${item.price}{"\n"}
           </Text>
         </View>
@@ -142,7 +169,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   scanagain: {
-    backgroundColor: "brown"
+    backgroundColor: "maroon"
   },
   itemframe: {
     alignItems: "center",

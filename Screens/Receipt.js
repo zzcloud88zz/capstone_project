@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { useEffect } from 'react';
-import { StyleSheet, Text, View, FlatList, TouchableOpacity, Alert, ImageBackground, Button } from 'react-native';
-import { MaterialCommunityIcons, Entypo } from '@expo/vector-icons';
+import React, {useEffect} from 'react';
+import { StyleSheet, Text, View, FlatList, TouchableOpacity, ImageBackground } from 'react-native';
+import { FontAwesome } from '@expo/vector-icons';
 
 export default function Receipt({ route, navigation }) {
     const Outlet = route.params.Outlet;
@@ -15,12 +15,12 @@ export default function Receipt({ route, navigation }) {
     // Back button at top left
     useEffect(() => {
       navigation.setOptions({
-        headerLeft: () => (
+        headerRight: () => (
           <TouchableOpacity style={{ paddingRight: 10 }}>
-            <Entypo
+            <FontAwesome
               onPress={() => navigation.navigate("Home")}
-              name="back"
-              size={40}
+              name="home"
+              size={36}
               color="black"
             />
           </TouchableOpacity>
@@ -46,7 +46,9 @@ export default function Receipt({ route, navigation }) {
             >
                 <Text>
                 Item: {item.product}{"\n"}
-                Quantity: {item.quantity}{"\n"}
+                Quantity: {item.quantity}
+                </Text>
+                <Text>
                 Price: ${(item.price*item.quantity).toFixed(2)}
                 </Text>
             </View>
@@ -65,16 +67,9 @@ export default function Receipt({ route, navigation }) {
               keyExtractor={(item) => item.barcode}
           />
           <View style={styles.payment}>
-              <Text style={styles.totalprice}>
-                Total: ${totalPrice}
-              </Text>
-            { cart == "" ? (
-              <Text></Text>
-            ) : (
-              <TouchableOpacity style={styles.paybutton} onPress={() => navigation.navigate("Home")}>
-                <Text style={styles.paybuttontext}>Back to Home</Text>
-              </TouchableOpacity>
-            )}
+            <Text style={styles.totalprice}>
+              Total: ${totalPrice}
+            </Text>
           </View>
         <StatusBar style="auto" />
       </ImageBackground>
@@ -104,23 +99,13 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   payment: {
-    flexDirection: "row",
     backgroundColor: "whitesmoke",
-    padding: 20,
+    padding: 30,
     marginBottom: 10,
-    justifyContent: "space-between",
   },
   totalprice: {
     fontSize: 20,
-  },
-  paybutton: {
-    backgroundColor: "lightgreen",
-    padding: 20,
-    paddingLeft: 35,
-    paddingRight: 35,
-    borderRadius: 5,
-  },
-  paybuttontext: {
-    fontSize: 18,
+    textAlign: "right",
+    fontWeight: "bold",
   },
 });

@@ -10,11 +10,6 @@ export default function Payment({ route, navigation}) {
   const Outlet = route.params.Outlet;
   const cart = route.params.cart;
   const totalPrice = route.params.totalPrice;
-  const cartInfo = {
-    id: "5eruyt35eggr76476236523t3",
-    description: "T Shirt - With react Native Logo",
-    amount: 1,
-  };
 
   const onCheckStatus = async (paymentResponse) => {
     setPaymentStatus("Please wait while confirming your payment!");
@@ -26,7 +21,6 @@ export default function Payment({ route, navigation}) {
     try {
       const stripeResponse = await axios.post("http://localhost:8000/payment", {
         email: "shengrong_88@hotmail.com",
-        product: cartInfo,
         authToken: jsonResponse,
       });
       if (stripeResponse) {
@@ -55,20 +49,15 @@ export default function Payment({ route, navigation}) {
             flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
-            height: 300,
+            height: 350,
             marginTop: 50,
+            marginBottom: 50,
           }}
         >
           <Text style={{ fontSize: 25, margin: 10 }}> Make Payment </Text>
-          {/*
-          <Text style={{ fontSize: 16, margin: 10 }}>
-            {" "}
-            Product Description: {" "}
-          </Text>
-          */}
           <Text style={{ fontSize: 20, margin: 10 }}>
             {" "}
-            Payable Amount: ${totalPrice}{"\n"}
+            Amount Payable: ${totalPrice}{"\n"}
           </Text>
           <TouchableOpacity
             style={{
@@ -120,9 +109,7 @@ export default function Payment({ route, navigation}) {
 
   return (
     <View style={styles.container}>
-      <ImageBackground source={require("./images/Payment.jpg")} style={styles.image}>
         {paymentUI()}
-      </ImageBackground>
     </View>
   );
 }
@@ -131,23 +118,5 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 100,
-    paddingBottom: 150,
-  },
-  navigation: { 
-    flex: 2, 
-    backgroundColor: "red",
-  },
-  body: {
-    flex: 10,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "yellow",
-  },
-  footer: {
-    flex: 1,
-    backgroundColor: "cyan",
-  },
-  image: {
-    flex: 1,
   },
 });

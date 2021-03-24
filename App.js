@@ -19,7 +19,7 @@ export default function App() {
         <Stack.Screen name="Barcode Scanner" component={BarcodeScanner} />
         <Stack.Screen name="Cart" component={Cart} />
         <Stack.Screen name="Payment" component={Payment} />
-        <Stack.Screen name="Receipt" component={Receipt} />
+        <Stack.Screen name="Receipt" component={Receipt} options={{headerLeft:null}}/>
       </Stack.Navigator>
     </NavigationContainer>
   );

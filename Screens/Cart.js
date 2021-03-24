@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, FlatList, TouchableOpacity, Alert, ImageBackground, Button } from 'react-native';
-import { MaterialCommunityIcons, Entypo } from '@expo/vector-icons';
+import { MaterialCommunityIcons, Entypo, Ionicons } from '@expo/vector-icons';
 
 export default function Cart({ route, navigation }) {
     const Outlet = route.params.Outlet;
@@ -13,9 +13,9 @@ export default function Cart({ route, navigation }) {
       navigation.setOptions({
         headerLeft: () => (
           <TouchableOpacity style={{ paddingRight: 10 }}>
-            <Entypo
+            <Ionicons
               onPress={() => navigation.navigate("Barcode Scanner", { deleted })}
-              name="back"
+              name="arrow-back"
               size={40}
               color="black"
             />
