@@ -13,12 +13,16 @@ export default function BarcodeScanner({ navigation, route }) {
   const [item, setItem] = useState([]);
   const [allitems, setAllitems] = useState([]);
   const Outlet = route.params.Outlet;
-  const deleteditem = route.params.deleted;
 
   // Update const variable "allitems" whenever back button in Cart is pressed.
   useEffect(() => {
-    setAllitems(allitems.filter(allitems=>allitems.barcode !== deleteditem))
-  }, [deleteditem])
+    if (route.params.cart > [0]) {
+      setAllitems(route.params.cart)
+    }
+    else {
+      setAllitems([])
+    }
+  }, [route.params.cart]);
 
   // Back to Home Screen button at top left
   useEffect(() => {

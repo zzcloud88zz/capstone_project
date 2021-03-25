@@ -6,7 +6,6 @@ import { MaterialCommunityIcons, Entypo, Ionicons } from '@expo/vector-icons';
 export default function Cart({ route, navigation }) {
     const Outlet = route.params.Outlet;
     const [cart, setCart] = useState(route.params.allitems);
-    const [deleted, setDeleted] = useState([]);
 
     // Back button at top left
     useEffect(() => {
@@ -14,7 +13,7 @@ export default function Cart({ route, navigation }) {
         headerLeft: () => (
           <TouchableOpacity style={{ paddingRight: 10 }}>
             <Ionicons
-              onPress={() => navigation.navigate("Barcode Scanner", { deleted })}
+              onPress={() => navigation.navigate("Barcode Scanner", { cart })}
               name="arrow-back"
               size={40}
               color="black"
@@ -83,7 +82,6 @@ export default function Cart({ route, navigation }) {
             style: "cancel"
           },
           { text: "OK", onPress: () => {
-            setDeleted(barcode)
             setCart(cart.filter(cart=>cart.barcode !== barcode))
           }
         }],
